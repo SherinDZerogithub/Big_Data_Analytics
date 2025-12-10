@@ -46,6 +46,7 @@ print("\nMerged dataset shape:", complete_data.shape)
 # -------------------------------------------------
 
 # Scatter Plot: Rating vs Views
+#--------------------------------------------
 fig_scatter = px.scatter(
     df,
     x="Viewer_Rate",
@@ -57,6 +58,7 @@ fig_scatter = px.scatter(
 )
 
 # Bar Chart: Views per Movie
+#-------------------------------------------
 fig_bar = px.bar(
     df,
     x="Film_Name",
@@ -66,7 +68,8 @@ fig_bar = px.bar(
     color_continuous_scale="Viridis"
 )
 
-#Bar chart : top 10 movies.........
+#Bar chart : top 10 movies
+#------------------------------------------
 top_movies = total_views.sort_values(
     'Total_Views', ascending=False
 ).head(10)
@@ -92,9 +95,11 @@ top_bar.update_traces(
     width=0.8 
 )
 
-
-#total Views............
+#-----------------------------------------
+#total Views
+#----------------------------------------
 # Histogram of Total Views (Plotly)
+#--------------------------------------
 fig_hist = px.histogram(
     total_views,
     x="Total_Views",
@@ -123,6 +128,7 @@ fig_box = px.box(
 
 
 # Line Chart: Monthly Views Trend
+#----------------------------------------------------
 monthly_trend = (
     monthly_views.groupby(["view_year", "view_month"])["Monthly_Views"]
     .sum()
@@ -143,6 +149,7 @@ fig_monthly = px.line(
 )
 
 # Line Chart: Views by Release Year
+#------------------------------------------------------
 fig_year = px.line(
     df.sort_values("Release_Year"),
     x="Release_Year",
@@ -152,11 +159,12 @@ fig_year = px.line(
 )
 
 
-#category & language analysis Top 10 Categories by total Views...............
-# Sort categories by total views
+#-----------------------------------------------------------
 # ---- CATEGORY STATS ----
 # Group by Category and calculate Total Views per Category
+#-----------------------------------------------------------
 # Category Distribution Pie Chart
+#-------------------------------------------------------------
 fig_pie = px.pie(
     df,
     names="Category",
@@ -192,11 +200,13 @@ category_bar.update_traces(
     textposition="outside"
 )
 
-
+#---------------------------------------------------------------------
 # Sort language category by total views
 # ---- CATEGORY STATS ----
 # Group by Language Category and calculate Total Views per Category
+#--------------------------------------------------------------------
 # Category Distribution Pie Chart
+#-----------------------------------------------------------------
 figL_pie = px.pie(
     df,
     names="Language",
@@ -217,7 +227,7 @@ categoryl_bar = px.bar(
     categoryl_stats,
     x="Language",              # Category on X-axis
     y="Number_of_Views",       # Views on Y-axis
-    title="Total Views by Category",
+    title="Total Views by Language",
     color="Number_of_Views",
     color_continuous_scale="Speed"
 )
@@ -233,7 +243,8 @@ categoryl_bar.update_traces(
 )
 
 
-#Analysis with average values_______--------
+#----------------------------------------------------
+#Analysis with average values
 #---------------------------------------------------
 correlation_data = processed_data[['Viewer_Rate', 'Number_of_Views',
                                    'Avg_Rating_Category', 'Avg_Rating_Language']]
@@ -270,7 +281,7 @@ month_performance.reset_index(inplace=True)
 
 
 # Average Views (Line + Fill)
-# -----------------------------
+# -------------------------------------------------------
 
 figm_avg_views = go.Figure()
 
@@ -289,8 +300,9 @@ figm_avg_views.update_layout(
     height=450
 )
 
+#---------------------------------------------
 #Total Views by Month (Bar)
-# -----------------------------
+# --------------------------------------------
 
 figm_total_views = px.bar(
     month_performance,
@@ -309,7 +321,7 @@ figm_total_views.update_layout(
 )
 
 # Movie Count (Pie Chart)
-# -----------------------------
+# ------------------------------------------------------
 
 figm_pie = px.pie(
     month_performance,
@@ -323,8 +335,9 @@ figm_pie.update_layout(width=700, height=450)
 
 
 
+#-------------------------------------------------------
 #Rating vs Month (Bubble Chart)
-# -----------------------------
+# ------------------------------------------------------
 
 fig_rating = px.scatter(
     month_performance,
@@ -343,10 +356,11 @@ fig_rating.update_layout(
 )
 
 
-
+#----------------------------------------------------------------------------
 # -------------------------------------------------
 # Build Dashboard Layout
 # -------------------------------------------------
+#----------------------------------------------------------------------------
 app = dash.Dash(__name__)
 
 app.layout = html.Div([
@@ -365,35 +379,18 @@ app.layout = html.Div([
 
         
     ],style={
-            "border": "2px solid black",  # black outline
-            "padding": "10px",             # optional: add some padding inside
+            "border": "2px solid black", 
+            "padding": "10px",             
             "margin": "10px"  
             } 
     ),
 
-    html.Div([
-        html.H2("Distribution of Total Views", style={"text-align": "center","font-size":"40px"}),
-        html.Div([
-            html.H3("Distribution of Total Views", style={"text-align": "center","font-size":"25px"}),
-            dcc.Graph(figure=fig_hist),
-        ], style={"width": "48%", "display": "inline-block","border": "2px solid black","margin": "10px"}),
-
-        html.Div([
-            html.H3("Box Plot of Total Views", style={"text-align": "center","font-size":"25px"}),
-            dcc.Graph(figure=fig_box),
-        ], style={"width": "48%", "display": "inline-block", "float": "right","border": "2px solid black","margin": "10px"}),
-                    # optional: spacing around the div
-    ],style={
-            "border": "2px solid black",  # black outline
-            "padding": "10px",
-            "margin": "10px"  
-            } 
-    ),
+    
 
     html.Div([
         html.H2("Categary Analysis", style={"text-align": "center","font-size":"40px"}),
         html.Div([
-            html.H3("Top 10 Categories by Total Views", style={"text-align": "center","font-size":"25px"}),
+            html.H3("Total Views by Category", style={"text-align": "center","font-size":"25px"}),
             dcc.Graph(figure=category_bar),
         ], style={"width": "48%", "display": "inline-block","border": "2px solid black","margin": "1px"}),
 
@@ -402,8 +399,8 @@ app.layout = html.Div([
             dcc.Graph(figure=fig_pie),
         ], style={"width": "50%", "display": "inline-block", "float": "right","border": "2px solid black","margin": "1px"}),
     ],style={
-            "border": "2px solid black",  # black outline
-            "padding": "10px",             # optional: add some padding inside
+            "border": "2px solid black",  
+            "padding": "10px",            
             "margin": "10px"  
             } 
     ),
@@ -412,7 +409,7 @@ app.layout = html.Div([
     html.Div([
         html.H2("Movie Language Analysis", style={"text-align": "center","font-size":"40px"}),
         html.Div([
-            html.H3("Top 10 Categories by Total Views", style={"text-align": "center","font-size":"25px"}),
+            html.H3("Total Views by Language", style={"text-align": "center","font-size":"25px"}),
             dcc.Graph(figure=categoryl_bar),
         ], style={"width": "48%", "display": "inline-block","border": "2px solid black","margin": "1px"}),
 
@@ -421,8 +418,8 @@ app.layout = html.Div([
             dcc.Graph(figure=figL_pie),
         ], style={"width": "50%", "display": "inline-block", "float": "right","border": "2px solid black","margin": "1px"}),
     ],style={
-            "border": "2px solid black",  # black outline
-            "padding": "10px",             # optional: add some padding inside
+            "border": "2px solid black",  
+            "padding": "10px",             
             "margin": "10px"  
             } 
     ),
@@ -439,25 +436,8 @@ app.layout = html.Div([
             dcc.Graph(figure=figm_total_views),
         ], style={"width": "50%", "display": "inline-block", "float": "right","border": "2px solid black","margin": "1px"}),
     ],style={
-            "border": "2px solid black",  # black outline
-            "padding": "10px",             # optional: add some padding inside
-            "margin": "10px"  
-            } 
-    ),
-
-    html.Div([
-        html.Div([
-            html.H3("Movie Count (Pie Chart)", style={"text-align": "center","font-size":"25px"}),
-            dcc.Graph(figure=figm_pie),
-        ], style={"width": "48%", "display": "inline-block","border": "2px solid black","margin": "1px"}),
-
-        html.Div([
-            html.H3("Rating vs Month (Bubble Chart)", style={"text-align": "center","font-size":"25px"}),
-            dcc.Graph(figure=fig_rating),
-        ], style={"width": "50%", "display": "inline-block", "float": "right","border": "2px solid black","margin": "1px"}),
-    ],style={
-            "border": "2px solid black",  # black outline
-            "padding": "10px",             # optional: add some padding inside
+            "border": "2px solid black",  
+            "padding": "10px",             
             "margin": "10px"  
             } 
     ),
@@ -474,8 +454,10 @@ app.layout = html.Div([
     dcc.Graph(figure=fig_monthly)
 ])
 
+#----------------------------------------------------------------
 # -------------------------------------------------
 # 4. Run the App
-# -------------------------------------------------
+# ------------------------------------------------
+#----------------------------------------------------------------
 if __name__ == "__main__":
     app.run(debug=True)
